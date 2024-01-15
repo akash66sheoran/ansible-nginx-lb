@@ -1,0 +1,6 @@
+[nginx_server]
+3.110.171.23 ansible_user=ubuntu
+
+[application_servers]
+35.154.232.222 ansible_user=ubuntu
+3.109.158.6 ansible_user=ubuntu

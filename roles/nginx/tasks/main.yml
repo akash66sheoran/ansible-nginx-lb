@@ -1,0 +1,35 @@
+---
+# tasks file for roles/nginx
+- name: install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+  
+- name: start nginx
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: yes
+
+- name: copy nginx configuration file
+  ansible.builtin.template:
+    src: default.j2
+    dest: /etc/nginx/sites-available/default
+  notify: restart_nginx
+
+- name: allow ssh connections
+  community.general.ufw:
+    rule: allow
+    port: 22
+    proto: tcp
+
+- name: allow http connections
+  community.general.ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+- name: enable firewall
+  ufw:
+    state: enabled
+    default: deny

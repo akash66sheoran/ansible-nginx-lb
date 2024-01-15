@@ -1,0 +1,42 @@
+---
+# tasks file for roles/application
+- name: install python3
+  ansible.builtin.apt:
+    name: python3
+    state: present
+
+- name: install pip
+  ansible.builtin.apt:
+    name: python3-pip
+    state: present
+
+- name: install flask
+  pip:
+    name: flask
+    state: present
+
+- name: install gunicorn
+  pip:
+    name: gunicorn
+    state: present
+
+- name: Create directory
+  file:
+    path: /home/ubuntu/flask-app
+    state: directory
+
+- name: Pull repository in user home directory
+  git:
+    repo: https://github.com/akash66sheoran/simple-flask-app.git
+    dest: "/home/ubuntu/flask-app"
+    force: yes
+  
+- name: copy index.html template
+  template:
+    src: index.html.j2
+    dest: /home/ubuntu/flask-app/templates/index.html
+
+- name: run application
+  shell: "gunicorn -b 0.0.0.0:5000 app:app --daemon"
+  args:
+    chdir: /home/ubuntu/flask-app

@@ -1,0 +1,21 @@
+---
+- name: update apt repository
+  hosts: all
+  become: yes
+  tasks:
+    - name: update apt repository
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+- name: application deplyment
+  hosts: application_servers
+  become: yes
+  roles:
+    - application
+
+- name: install and configure nginx server
+  hosts: nginx_server
+  become: yes
+  roles:
+    - nginx
